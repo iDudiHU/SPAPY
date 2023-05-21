@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34b22bafec69d1445970f4bdaea84be1, type: 3}
+  m_Name: PayloadUncommon
+  m_EditorClassIdentifier: 
+  asteroid: {fileID: 1166888355319638, guid: 7031a5477cdbee8449a7c11e94bc14c4, type: 3}
+  weight: 0.3
+  minSpawns: 3
+  maxSpawns: 6
+  emissionTextures:
+  - {fileID: 2800000, guid: 47881fad258bd43468e7ba6694e5ad76, type: 3}
+  - {fileID: 2800000, guid: 9393401094e28ca4092b02c83ff6c76b, type: 3}
+  colors: {fileID: 11400000, guid: 064acb6f1fc5c5745a28099fca1d8738, type: 2}
+  baseMaterial: {fileID: 2100000, guid: efbbf76b1363fc049bde4722e20a2d4f, type: 2}
