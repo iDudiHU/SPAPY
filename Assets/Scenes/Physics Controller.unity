@@ -40588,7 +40588,7 @@ MonoBehaviour:
   m_JumpHeight: 5
   m_MaxAirJumpAmmount: 2
   m_ContinualJumpForceMultiplier: 0.1
-  m_JumpTime: 0.175
+  m_JumpTime: 0.3
   m_JumpTimeCounter: 0
   m_CoyoteTime: 0.15
   m_CoyoteTimeCounter: 0
@@ -71531,7 +71531,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 70e088d74c2304c48b183106e9e3c8f8, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 

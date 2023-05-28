@@ -208,7 +208,7 @@ public class PlayerPhysicsMovement : MonoBehaviour
     }
     void SetCoyoteTimeCounter()
     {
-        if (IsGrounded)
+        if (IsGrounded || m_CurrentJumpAmmount < m_MaxAirJumpAmmount)
         {
             m_CoyoteTimeCounter = m_CoyoteTime;
         }
