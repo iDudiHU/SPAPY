@@ -879,9 +879,81 @@ public partial class @IAA: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Aim"",
+                    ""type"": ""Button"",
+                    ""id"": ""7a1ba425-1c13-4704-aead-a8f55e44bee2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Shoot"",
+                    ""type"": ""Value"",
+                    ""id"": ""3cdae3ff-985f-48c1-978d-37d2951eb8c5"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""7200412e-a31b-43aa-9c4f-27e13ece386e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Value"",
+                    ""id"": ""fdbec776-def3-46c5-8c16-463db52eea91"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Run"",
+                    ""type"": ""Value"",
+                    ""id"": ""1c49be47-734d-4796-b622-0eac8781ce77"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ZoomCamera"",
+                    ""type"": ""Value"",
+                    ""id"": ""799bdeb9-604b-4cc2-a3b6-5cb66acdf99c"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""ChangeCamera"",
                     ""type"": ""Button"",
                     ""id"": ""6f49ab6d-17fb-41bd-8022-1fa285105ce7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""a5be3cde-e638-4eea-b2be-952cd7272939"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MagneticBoots"",
+                    ""type"": ""Button"",
+                    ""id"": ""e20c155c-949c-4355-99ab-3d84943b98aa"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -957,6 +1029,116 @@ public partial class @IAA: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""09ddcb45-b8a0-446f-8ae8-d86adf65f8f8"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""ChangeCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1ac2074d-3727-4260-88eb-bd7051ab9eb2"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3063a59c-c00f-44b7-8e4a-45768bccd54b"",
+                    ""path"": ""<Gamepad>/dpad/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ZoomCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f01048bd-9c22-4232-a915-988944fcdaef"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": ""Clamp(min=-4,max=4)"",
+                    ""groups"": """",
+                    ""action"": ""ZoomCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""175f7dd6-2aee-4ba0-81fa-4259fc71d2eb"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c14535f3-3a11-4a4e-ade4-82305b76e942"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ad122de1-b8ef-4374-9c0d-abec49b58c83"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cd8d2a7f-4cd5-4f1b-b734-42ee13fe1728"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""10cfaa13-2670-4a17-9c37-66b449ea632f"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b0b5dd16-3b43-4b76-91ad-2286b378d019"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""3a446e53-6bf5-48cd-933a-867e178b674d"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
@@ -979,23 +1161,89 @@ public partial class @IAA: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""09ddcb45-b8a0-446f-8ae8-d86adf65f8f8"",
-                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""id"": ""a74050ce-1991-4f07-b387-79068013556e"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Controller"",
-                    ""action"": ""ChangeCamera"",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""1ac2074d-3727-4260-88eb-bd7051ab9eb2"",
-                    ""path"": ""<Keyboard>/c"",
+                    ""id"": ""b5c5c0bd-88e1-411b-86d0-50173d88ff19"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeCamera"",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d650d507-ebb5-4a70-90e7-ad88fe3f74a7"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fd716c2e-4baa-45da-a98d-55cfbb2515ec"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""37862895-b9be-444f-9caa-cfded0de09cb"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""abb08283-6dfa-4ab2-8e8f-b64412ebe522"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ab1bea19-0bfe-4685-aa2b-673bc5a7c257"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": ""SlowTap"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MagneticBoots"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""42f8d905-50ab-46a9-b61a-9c1d34d1253f"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MagneticBoots"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1055,7 +1303,15 @@ public partial class @IAA: IInputActionCollection2, IDisposable
         m_HumanoidLand = asset.FindActionMap("HumanoidLand", throwIfNotFound: true);
         m_HumanoidLand_Move = m_HumanoidLand.FindAction("Move", throwIfNotFound: true);
         m_HumanoidLand_Look = m_HumanoidLand.FindAction("Look", throwIfNotFound: true);
+        m_HumanoidLand_Aim = m_HumanoidLand.FindAction("Aim", throwIfNotFound: true);
+        m_HumanoidLand_Shoot = m_HumanoidLand.FindAction("Shoot", throwIfNotFound: true);
+        m_HumanoidLand_Interact = m_HumanoidLand.FindAction("Interact", throwIfNotFound: true);
+        m_HumanoidLand_Jump = m_HumanoidLand.FindAction("Jump", throwIfNotFound: true);
+        m_HumanoidLand_Run = m_HumanoidLand.FindAction("Run", throwIfNotFound: true);
+        m_HumanoidLand_ZoomCamera = m_HumanoidLand.FindAction("ZoomCamera", throwIfNotFound: true);
         m_HumanoidLand_ChangeCamera = m_HumanoidLand.FindAction("ChangeCamera", throwIfNotFound: true);
+        m_HumanoidLand_ToggleMenu = m_HumanoidLand.FindAction("ToggleMenu", throwIfNotFound: true);
+        m_HumanoidLand_MagneticBoots = m_HumanoidLand.FindAction("MagneticBoots", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1315,14 +1571,30 @@ public partial class @IAA: IInputActionCollection2, IDisposable
     private List<IHumanoidLandActions> m_HumanoidLandActionsCallbackInterfaces = new List<IHumanoidLandActions>();
     private readonly InputAction m_HumanoidLand_Move;
     private readonly InputAction m_HumanoidLand_Look;
+    private readonly InputAction m_HumanoidLand_Aim;
+    private readonly InputAction m_HumanoidLand_Shoot;
+    private readonly InputAction m_HumanoidLand_Interact;
+    private readonly InputAction m_HumanoidLand_Jump;
+    private readonly InputAction m_HumanoidLand_Run;
+    private readonly InputAction m_HumanoidLand_ZoomCamera;
     private readonly InputAction m_HumanoidLand_ChangeCamera;
+    private readonly InputAction m_HumanoidLand_ToggleMenu;
+    private readonly InputAction m_HumanoidLand_MagneticBoots;
     public struct HumanoidLandActions
     {
         private @IAA m_Wrapper;
         public HumanoidLandActions(@IAA wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_HumanoidLand_Move;
         public InputAction @Look => m_Wrapper.m_HumanoidLand_Look;
+        public InputAction @Aim => m_Wrapper.m_HumanoidLand_Aim;
+        public InputAction @Shoot => m_Wrapper.m_HumanoidLand_Shoot;
+        public InputAction @Interact => m_Wrapper.m_HumanoidLand_Interact;
+        public InputAction @Jump => m_Wrapper.m_HumanoidLand_Jump;
+        public InputAction @Run => m_Wrapper.m_HumanoidLand_Run;
+        public InputAction @ZoomCamera => m_Wrapper.m_HumanoidLand_ZoomCamera;
         public InputAction @ChangeCamera => m_Wrapper.m_HumanoidLand_ChangeCamera;
+        public InputAction @ToggleMenu => m_Wrapper.m_HumanoidLand_ToggleMenu;
+        public InputAction @MagneticBoots => m_Wrapper.m_HumanoidLand_MagneticBoots;
         public InputActionMap Get() { return m_Wrapper.m_HumanoidLand; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1338,9 +1610,33 @@ public partial class @IAA: IInputActionCollection2, IDisposable
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
+            @Aim.started += instance.OnAim;
+            @Aim.performed += instance.OnAim;
+            @Aim.canceled += instance.OnAim;
+            @Shoot.started += instance.OnShoot;
+            @Shoot.performed += instance.OnShoot;
+            @Shoot.canceled += instance.OnShoot;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
+            @Run.started += instance.OnRun;
+            @Run.performed += instance.OnRun;
+            @Run.canceled += instance.OnRun;
+            @ZoomCamera.started += instance.OnZoomCamera;
+            @ZoomCamera.performed += instance.OnZoomCamera;
+            @ZoomCamera.canceled += instance.OnZoomCamera;
             @ChangeCamera.started += instance.OnChangeCamera;
             @ChangeCamera.performed += instance.OnChangeCamera;
             @ChangeCamera.canceled += instance.OnChangeCamera;
+            @ToggleMenu.started += instance.OnToggleMenu;
+            @ToggleMenu.performed += instance.OnToggleMenu;
+            @ToggleMenu.canceled += instance.OnToggleMenu;
+            @MagneticBoots.started += instance.OnMagneticBoots;
+            @MagneticBoots.performed += instance.OnMagneticBoots;
+            @MagneticBoots.canceled += instance.OnMagneticBoots;
         }
 
         private void UnregisterCallbacks(IHumanoidLandActions instance)
@@ -1351,9 +1647,33 @@ public partial class @IAA: IInputActionCollection2, IDisposable
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
+            @Aim.started -= instance.OnAim;
+            @Aim.performed -= instance.OnAim;
+            @Aim.canceled -= instance.OnAim;
+            @Shoot.started -= instance.OnShoot;
+            @Shoot.performed -= instance.OnShoot;
+            @Shoot.canceled -= instance.OnShoot;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
+            @Run.started -= instance.OnRun;
+            @Run.performed -= instance.OnRun;
+            @Run.canceled -= instance.OnRun;
+            @ZoomCamera.started -= instance.OnZoomCamera;
+            @ZoomCamera.performed -= instance.OnZoomCamera;
+            @ZoomCamera.canceled -= instance.OnZoomCamera;
             @ChangeCamera.started -= instance.OnChangeCamera;
             @ChangeCamera.performed -= instance.OnChangeCamera;
             @ChangeCamera.canceled -= instance.OnChangeCamera;
+            @ToggleMenu.started -= instance.OnToggleMenu;
+            @ToggleMenu.performed -= instance.OnToggleMenu;
+            @ToggleMenu.canceled -= instance.OnToggleMenu;
+            @MagneticBoots.started -= instance.OnMagneticBoots;
+            @MagneticBoots.performed -= instance.OnMagneticBoots;
+            @MagneticBoots.canceled -= instance.OnMagneticBoots;
         }
 
         public void RemoveCallbacks(IHumanoidLandActions instance)
@@ -1414,6 +1734,14 @@ public partial class @IAA: IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
+        void OnAim(InputAction.CallbackContext context);
+        void OnShoot(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
+        void OnRun(InputAction.CallbackContext context);
+        void OnZoomCamera(InputAction.CallbackContext context);
         void OnChangeCamera(InputAction.CallbackContext context);
+        void OnToggleMenu(InputAction.CallbackContext context);
+        void OnMagneticBoots(InputAction.CallbackContext context);
     }
 }

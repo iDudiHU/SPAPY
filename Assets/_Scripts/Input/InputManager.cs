@@ -5,137 +5,147 @@ using UnityEngine.InputSystem.Interactions;
 namespace TigrisDigitalCreative._Input
 {
     public class InputManager : MonoBehaviour
-    { 
-        public Vector2 MoveInput { get; private set; } = Vector2.zero; 
+    {
+        public Vector2 MoveInput { get; private set; } = Vector2.zero;
         public bool MoveIsPressed = false;
-    public Vector2 LookInput { get; private set; } = Vector2.zero;
-    public bool InvertMouseY { get; private set; } = true;
-    public float ZoomCameraInput { get; private set; } = 0.0f;
-    public bool InvertScroll { get; private set; } = true;
-    public bool RunIsPressed { get; private set; } = false;
-    public bool CrouchIsPressed { get; private set; } = false;
-    public bool JumpIsPressed { get; private set; } = false;
-    public float ActivateInput { get; private set; } = 0.0f;
-    public bool ChaosIsPressed { get; private set; } = false;
-
-    public bool ChangeCameraWasPressedThisFrame { get; private set; } = false;
-    public bool OnOffWasPressedThisFrame { get; private set; } = false;
-    public bool ModeWasPressedThisFrame { get; private set; } = false;
-    public bool SwitchCharacterWasPressedThisFrame { get; private set; } = false;
-    
-    IAA _input = null;
+        public Vector2 LookInput { get; private set; } = Vector2.zero;
+        public bool InvertMouseY { get; private set; } = true;
+        public bool AimIsPressed { get; private set; } = false;
+        public float ZoomCameraInput { get; private set; } = 0.0f;
+        public bool InvertScroll { get; private set; } = true;
+        public bool ShootInput { get; private set; } = false;
+        public bool RunIsPressed { get; private set; } = false;
+        public bool JumpIsPressed { get; private set; } = false;
+        public bool MagneticBootsIsOn{ get; private set; } = false;
+        public bool ChangeCameraWasPressedThisFrame { get; private set; } = false;
+        public bool InteractWasPressedThisFrame { get; private set; } = false;
+        public bool EscapeWasPressedThisFrame { get; private set; } = false;
 
 
-    private void OnEnable()
-    {
-        _input = new IAA();
-        _input.HumanoidLand.Enable();
+        IAA _input = null;
 
-        _input.HumanoidLand.Move.performed += SetMove;
-        _input.HumanoidLand.Move.canceled += SetMove;
 
-        _input.HumanoidLand.Look.performed += SetLook;
-        _input.HumanoidLand.Look.canceled += SetLook;
-        /*
-        _input.HumanoidLand.Run.started += SetRun;
-        _input.HumanoidLand.Run.canceled += SetRun;
+        private void OnEnable()
+        {
+            _input = new IAA();
+            _input.HumanoidLand.Enable();
 
-        _input.HumanoidLand.Crouch.started += SetCrouch;
-        _input.HumanoidLand.Crouch.canceled += SetCrouch;
+            _input.HumanoidLand.Move.performed += SetMove;
+            _input.HumanoidLand.Move.canceled += SetMove;
 
-        _input.HumanoidLand.Jump.started += SetJump;
-        _input.HumanoidLand.Jump.canceled += SetJump;
+            _input.HumanoidLand.Look.performed += SetLook;
+            _input.HumanoidLand.Look.canceled += SetLook;
+            
+            _input.HumanoidLand.Aim.started += SetAim;
+            _input.HumanoidLand.Aim.canceled += SetAim;
 
-        _input.HumanoidLand.ZoomCamera.started += SetZoomCamera;
-        _input.HumanoidLand.ZoomCamera.canceled += SetZoomCamera;
+            _input.HumanoidLand.Shoot.performed += SetShoot;
+            _input.HumanoidLand.Shoot.canceled += SetShoot;
+            
+            _input.HumanoidLand.Run.started += SetRun;
+            _input.HumanoidLand.Run.canceled += SetRun;
 
-        _input.HumanoidLand.Activate.performed += SetActivate;
-        _input.HumanoidLand.Activate.canceled += SetActivate;
+            _input.HumanoidLand.Jump.started += SetJump;
+            _input.HumanoidLand.Jump.canceled += SetJump;
 
-        _input.HumanoidLand.Chaos.started += SetChaos;
-        _input.HumanoidLand.Chaos.canceled += SetChaos;
-        */
-    }
+            _input.HumanoidLand.ZoomCamera.started += SetZoomCamera;
+            _input.HumanoidLand.ZoomCamera.canceled += SetZoomCamera;
 
-    private void OnDisable()
-    {
-        _input.HumanoidLand.Move.performed -= SetMove;
-        _input.HumanoidLand.Move.canceled -= SetMove;
+            _input.HumanoidLand.MagneticBoots.started += SetMagneticBoots;
+            _input.HumanoidLand.MagneticBoots.canceled += SetMagneticBoots;
+            _input.HumanoidLand.MagneticBoots.performed += SetMagneticBoots;
 
-        _input.HumanoidLand.Look.performed -= SetLook;
-        _input.HumanoidLand.Look.canceled -= SetLook;
-        /*
-        _input.HumanoidLand.Run.started -= SetRun;
-        _input.HumanoidLand.Run.canceled -= SetRun;
+        }
 
-        _input.HumanoidLand.Crouch.started -= SetCrouch;
-        _input.HumanoidLand.Crouch.canceled -= SetCrouch;
+        private void OnDisable()
+        {
+            _input.HumanoidLand.Move.performed -= SetMove;
+            _input.HumanoidLand.Move.canceled -= SetMove;
 
-        _input.HumanoidLand.Jump.started -= SetJump;
-        _input.HumanoidLand.Jump.canceled -= SetJump;
+            _input.HumanoidLand.Look.performed -= SetLook;
+            _input.HumanoidLand.Look.canceled -= SetLook;
 
-        _input.HumanoidLand.ZoomCamera.started -= SetZoomCamera;
-        _input.HumanoidLand.ZoomCamera.canceled -= SetZoomCamera;
+            _input.HumanoidLand.Aim.started -= SetAim;
+            _input.HumanoidLand.Aim.canceled -= SetAim;
 
-        _input.HumanoidLand.Activate.performed -= SetActivate;
-        _input.HumanoidLand.Activate.canceled -= SetActivate;
+            _input.HumanoidLand.Shoot.performed -= SetShoot;
+            _input.HumanoidLand.Shoot.canceled -= SetShoot;
+            
+            _input.HumanoidLand.Run.started -= SetRun;
+            _input.HumanoidLand.Run.canceled -= SetRun;
 
-        _input.HumanoidLand.Chaos.started -= SetChaos;
-        _input.HumanoidLand.Chaos.canceled -= SetChaos;
-        */
+            _input.HumanoidLand.Jump.started -= SetJump;
+            _input.HumanoidLand.Jump.canceled -= SetJump;
 
-        _input.HumanoidLand.Disable();
-    }
+            _input.HumanoidLand.ZoomCamera.started -= SetZoomCamera;
+            _input.HumanoidLand.ZoomCamera.canceled -= SetZoomCamera;
+            
+            _input.HumanoidLand.MagneticBoots.started -= SetMagneticBoots;
+            _input.HumanoidLand.MagneticBoots.canceled -= SetMagneticBoots;
+            _input.HumanoidLand.MagneticBoots.performed -= SetMagneticBoots;
 
-    private void Update()
-    {
-        ChangeCameraWasPressedThisFrame = _input.HumanoidLand.ChangeCamera.WasPressedThisFrame();
-        /*
-        OnOffWasPressedThisFrame = _input.HumanoidLand.OnOff.WasPressedThisFrame();
-        ModeWasPressedThisFrame = _input.HumanoidLand.Mode.WasPressedThisFrame();
-        SwitchCharacterWasPressedThisFrame = _input.HumanoidLand.SwitchCharacter.WasPressedThisFrame();
-        */
-    }
 
-    private void SetMove(InputAction.CallbackContext ctx)
-    {
-        MoveInput = ctx.ReadValue<Vector2>();
-        MoveIsPressed = !(MoveInput == Vector2.zero);
-    }
+            _input.HumanoidLand.Disable();
+        }
 
-    private void SetLook(InputAction.CallbackContext ctx)
-    {
-        LookInput = ctx.ReadValue<Vector2>();
-    }
+        private void Update()
+        {
+            ChangeCameraWasPressedThisFrame = _input.HumanoidLand.ChangeCamera.WasPressedThisFrame();
+            InteractWasPressedThisFrame = _input.HumanoidLand.Interact.WasPressedThisFrame();
+            EscapeWasPressedThisFrame = _input.HumanoidLand.ToggleMenu.WasPressedThisFrame();
+        }
 
-    private void SetRun(InputAction.CallbackContext ctx)
-    {
-        RunIsPressed = ctx.started;
-    }
+        private void SetMove(InputAction.CallbackContext ctx)
+        {
+            MoveInput = ctx.ReadValue<Vector2>();
+            MoveIsPressed = !(MoveInput == Vector2.zero);
+        }
 
-    private void SetCrouch(InputAction.CallbackContext ctx)
-    {
-        CrouchIsPressed = ctx.started;
-    }
+        private void SetLook(InputAction.CallbackContext ctx)
+        {
+            LookInput = ctx.ReadValue<Vector2>();
+        }
 
-    private void SetJump(InputAction.CallbackContext ctx)
-    {
-        JumpIsPressed = ctx.started;
-    }
+        private void SetRun(InputAction.CallbackContext ctx)
+        {
+            RunIsPressed = ctx.started;
+        }
 
-    private void SetZoomCamera(InputAction.CallbackContext ctx)
-    {
-        ZoomCameraInput = ctx.ReadValue<float>();
-    }
+        private void SetAim(InputAction.CallbackContext ctx)
+        {
+            AimIsPressed = ctx.started;
+        }
 
-    private void SetActivate(InputAction.CallbackContext ctx)
-    {
-        ActivateInput = ctx.ReadValue<float>();
-    }
+        private void SetJump(InputAction.CallbackContext ctx)
+        {
+            JumpIsPressed = ctx.started;
+        }
 
-    private void SetChaos(InputAction.CallbackContext ctx)
-    {
-        ChaosIsPressed = ctx.started;
-    }
+        private void SetZoomCamera(InputAction.CallbackContext ctx)
+        {
+            ZoomCameraInput = ctx.ReadValue<float>();
+        }
+
+        private void SetShoot(InputAction.CallbackContext ctx)
+        {
+            ShootInput = ctx.started;
+        }
+        
+        private void SetMagneticBoots(InputAction.CallbackContext ctx)
+        {
+            switch(ctx.phase)
+            {
+                case InputActionPhase.Started: // the key has been pressed
+                    MagneticBootsIsOn = true;
+                    break;
+                case InputActionPhase.Performed: // a slow tap has been detected
+                    MagneticBootsIsOn = true;
+                    break;
+                case InputActionPhase.Canceled: // the key has been released
+                    MagneticBootsIsOn = false;
+                    break;
+            }
+        }
+
     }
 }

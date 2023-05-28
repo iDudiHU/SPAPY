@@ -19,6 +19,7 @@ public class HumanoidLandInput : MonoBehaviour
     public bool OnOffWasPressedThisFrame { get; private set; } = false;
     public bool ModeWasPressedThisFrame { get; private set; } = false;
     public bool SwitchCharacterWasPressedThisFrame { get; private set; } = false;
+    public bool CrouchToggleWasPressedThisFrame { get; private set; } = false;
 
 
     InputActions _input = null;
@@ -89,6 +90,7 @@ public class HumanoidLandInput : MonoBehaviour
         OnOffWasPressedThisFrame = _input.HumanoidLand.OnOff.WasPressedThisFrame();
         ModeWasPressedThisFrame = _input.HumanoidLand.Mode.WasPressedThisFrame();
         SwitchCharacterWasPressedThisFrame = _input.HumanoidLand.SwitchCharacter.WasPressedThisFrame();
+        CrouchToggleWasPressedThisFrame = _input.HumanoidLand.CrouchToggle.WasPressedThisFrame();
     }
 
     private void SetMove(InputAction.CallbackContext ctx)

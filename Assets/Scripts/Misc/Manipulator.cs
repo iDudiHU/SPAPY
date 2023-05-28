@@ -125,6 +125,15 @@ public class Manipulator : MonoBehaviour
             if (_manipulatorIsEnabled || _manipulatorToggledOn)
             {
                 other.attachedRigidbody.useGravity = false;
+                if (!(other.gameObject.CompareTag("Player")))
+                {
+                    if (Vector3.Distance(transform.position, other.transform.position) < 0.5f + other.bounds.extents.y)
+                    {
+                        Attractees.Remove(other.attachedRigidbody);
+                        Destroy(other.gameObject);
+                        _counter.Counter++;
+                    }
+                }
             }
             else
             {
@@ -151,19 +160,21 @@ public class Manipulator : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (_manipulatorIsEnabled || _manipulatorToggledOn)
-        {
-            if (Attractees.Contains(collision.rigidbody))
-            {
-                if (!(collision.gameObject.CompareTag("Player")))
-                {
-                    Attractees.Remove(collision.rigidbody);
-                    Destroy(collision.gameObject);
-                    _counter.Counter++;
-                }
-            }
-        }
-    }
+
+    // Disabled the collider for now and made the removal/counter distance based
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    if (_manipulatorIsEnabled || _manipulatorToggledOn)
+    //    {
+    //        if (Attractees.Contains(collision.rigidbody))
+    //        {
+    //            if (!(collision.gameObject.CompareTag("Player")))
+    //            {
+    //                Attractees.Remove(collision.rigidbody);
+    //                Destroy(collision.gameObject);
+    //                _counter.Counter++;
+    //            }
+    //        }
+    //    }
+    //}
 }

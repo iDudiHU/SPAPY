@@ -69,6 +69,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "CrouchToggle",
+                    "type": "Button",
+                    "id": "6111fcda-742e-4df8-8c3a-eee0b5daaecf",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Activate",
                     "type": "Value",
                     "id": "df9740b3-5450-4cd3-9f24-38be5d0b885d",
@@ -217,7 +226,7 @@
                 {
                     "name": "",
                     "id": "31a0fd89-7171-4787-8586-5f1cb1668edd",
-                    "path": "<Keyboard>/c",
+                    "path": "<Keyboard>/v",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -420,6 +429,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Chaos",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c2ae6e39-6696-4830-bf81-7f312fbd5545",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CrouchToggle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
