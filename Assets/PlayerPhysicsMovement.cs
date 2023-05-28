@@ -184,7 +184,7 @@ public class PlayerPhysicsMovement : MonoBehaviour
             m_IsJumping = true;
             m_JumpBufferTimeCounter = 0.0f;
             m_CoyoteTimeCounter = 0.0f;
-        } else if (m_Input.JumpIsPressed && m_IsJumping && !IsGrounded && m_JumpTimeCounter > 0.0f)
+        } else if (m_Input.JumpIsPressed && m_IsJumping && m_JumpTimeCounter > 0.0f)
         {
             jumpSpeed = Mathf.Sqrt(2f * Physics.gravity.magnitude * m_JumpHeight);
             float alignedSpeed = Vector3.Dot(m_Velocity, jumpDirection);
@@ -192,7 +192,7 @@ public class PlayerPhysicsMovement : MonoBehaviour
                 jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
             }
             jumpSpeed *= m_ContinualJumpForceMultiplier;
-        } else if (m_IsJumping && IsGrounded)
+        } else if ((!m_Input.JumpIsPressed && m_IsJumping && IsGrounded) || m_JumpTimeCounter < 0)
         {
             m_IsJumping = false;
         }
