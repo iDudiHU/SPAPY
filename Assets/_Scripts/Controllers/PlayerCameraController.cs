@@ -64,13 +64,13 @@ public class PlayerCameraController : MonoBehaviour
         {
             _playerLookInput = GetLookInput();
             PlayerLook();
-            PitchCamera();
+            //PitchCamera();
         }
     }
 
     private void LateUpdate()
     {
-        _gravityAlignment = Quaternion.FromToRotation(_gravityAlignment * Vector3.up, -Physics.gravity.normalized) * _gravityAlignment;
+        _gravityAlignment = Quaternion.FromToRotation(_gravityAlignment * Vector3.up, CustomGravity.GetGravity(_rigidbody.position)) * _gravityAlignment;
     }
 
     private void ZoomCamera()
@@ -133,8 +133,21 @@ public class PlayerCameraController : MonoBehaviour
     }
     private void PlayerLook()
     {
-        _rigidbody.rotation = Quaternion.Euler(0.0f, _rigidbody.rotation.eulerAngles.y + (_playerLookInput.x * _rotationSpeedMultiplier), 0.0f);
+        float rotationDelta = _playerLookInput.x * _rotationSpeedMultiplier;
+        Quaternion rotation = Quaternion.AngleAxis(rotationDelta, CustomGravity.GetUpAxis(_rigidbody.position));
+        Vector3 dir = Vector3.ProjectOnPlane(rotation * _rigidbody.transform.forward, CustomGravity.GetUpAxis(_rigidbody.position));
+
+        // Ensure the direction vector is not zero
+        if (dir != Vector3.zero) {
+            Quaternion targetRotation = Quaternion.LookRotation(dir, CustomGravity.GetUpAxis(_rigidbody.position));
+            _rigidbody.transform.rotation = Quaternion.RotateTowards(_rigidbody.transform.rotation, targetRotation, _rotationSpeedMultiplier * Time.deltaTime);
+        }
     }
+
+
+
+
+
 
     private void PitchCamera()
     {
@@ -142,5 +155,8 @@ public class PlayerCameraController : MonoBehaviour
         _cameraPitch = Mathf.Clamp(_cameraPitch, -89.9f, 89.9f);
 
         CameraFollow.rotation = Quaternion.Euler(_cameraPitch, CameraFollow.rotation.eulerAngles.y, CameraFollow.rotation.eulerAngles.z);
+    }
+    Vector3 ProjectDirectionOnPlane(Vector3 direction, Vector3 normal) {
+        return (direction - normal * Vector3.Dot(direction, normal)).normalized;
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 //[RequireComponent(typeof(Rigidbody))] 
+[DefaultExecutionOrder(-1)]
 public class PlayerPhysicsMovement : MonoBehaviour
 {
     #region Private Variables
@@ -26,6 +27,10 @@ public class PlayerPhysicsMovement : MonoBehaviour
     [Header("=== Ground Settings ===")]
     //Grounded Stuff
     Vector3 m_UpAxis, m_RightAxis, m_ForwardAxis;
+
+    public bool m_AlignToSurface = true;
+    [SerializeField]float m_AlignmentSpeed = 0.5f;
+    Quaternion m_gravityAlignment = Quaternion.identity;
     public bool IsGrounded => m_GroundContactCount > 0;
     private bool OnSteep => m_SteepContactCount > 0;
     int m_GroundContactCount, m_SteepContactCount;
@@ -62,6 +67,7 @@ public class PlayerPhysicsMovement : MonoBehaviour
         m_Input = GetComponent<InputManager>();
         m_RigidBody = GetComponent<Rigidbody>();
         m_Collider = GetComponent<CapsuleCollider>();
+        m_RigidBody.useGravity = false;
         OnValidate();    
     }
 
@@ -86,13 +92,32 @@ public class PlayerPhysicsMovement : MonoBehaviour
         m_DesiredVelocity  = new Vector3(m_Input.MoveInput.x, 0f, m_Input.MoveInput.y) * currentMaxSpeed;
     }
 
+    private void LateUpdate()
+    {
+        if (m_AlignToSurface) {
+            GravityAlignment();
+        }
+    }
+
+    private void GravityAlignment()
+    {
+        m_gravityAlignment = Quaternion.FromToRotation(transform.up, m_UpAxis);
+        float t = Time.deltaTime * m_AlignmentSpeed;
+        t = Helpers.EaseOutCirc(t);
+        transform.rotation = Quaternion.Slerp(transform.rotation, m_gravityAlignment * transform.rotation, t);
+    }
+
+
+
+
     private void FixedUpdate()
     {
-        m_UpAxis = -Physics.gravity.normalized;
+        Vector3 gravity = CustomGravity.GetGravity(m_RigidBody.position, out m_UpAxis);
         m_Velocity = m_RigidBody.velocity;
         UpdateState();
         AdjustVelocity();
-        Jump();
+        Jump(gravity);
+        m_Velocity += gravity * Time.unscaledDeltaTime;
         m_RigidBody.velocity = m_Velocity;
         ClearState();
     }
@@ -137,15 +162,7 @@ public class PlayerPhysicsMovement : MonoBehaviour
         m_SteepContactCount = 0;
         m_ContactNormal = m_SteepNormal =Vector3.zero;
     }
-
-    void GroundCheck()
-    {
-        Vector3 feetPosition = m_RigidBody.position - (m_RigidBody.transform.up * m_Collider.height / 2) * 0.95f ;
-        //m_IsGrounded = Physics.Raycast(feetPosition, -m_RigidBody.transform.up,out m_GroundCheckHit,0.1f,m_GroundLayerMask);
-        Debug.DrawRay(feetPosition, -m_RigidBody.transform.up * 0.1f, Color.magenta);
-    }
-
-    void Jump()
+    void Jump(Vector3 gravity)
     {
         Vector3 jumpDirection;
         float jumpSpeed = 0;
@@ -175,7 +192,7 @@ public class PlayerPhysicsMovement : MonoBehaviour
         if (m_JumpBufferTimeCounter > 0.0f && !m_IsJumping && m_CoyoteTimeCounter > 0.0f) {
             m_StepsSinceLastJump = 0;
             m_CurrentJumpAmmount++;
-            jumpSpeed = Mathf.Sqrt(2f * Physics.gravity.magnitude * m_JumpHeight);
+            jumpSpeed = Mathf.Sqrt(2f * gravity.magnitude * m_JumpHeight);
             jumpDirection = (jumpDirection + m_UpAxis).normalized;
             float alignedSpeed = Vector3.Dot(m_Velocity, jumpDirection);
             if (alignedSpeed > 0f) {
@@ -186,7 +203,7 @@ public class PlayerPhysicsMovement : MonoBehaviour
             m_CoyoteTimeCounter = 0.0f;
         } else if (m_Input.JumpIsPressed && m_IsJumping && m_JumpTimeCounter > 0.0f)
         {
-            jumpSpeed = Mathf.Sqrt(2f * Physics.gravity.magnitude * m_JumpHeight);
+            jumpSpeed = Mathf.Sqrt(2f * gravity.magnitude * m_JumpHeight);
             float alignedSpeed = Vector3.Dot(m_Velocity, jumpDirection);
             if (alignedSpeed > 0f) {
                 jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
