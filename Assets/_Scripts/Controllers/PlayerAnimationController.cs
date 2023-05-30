@@ -56,6 +56,13 @@ public class PlayerAnimationController : MonoBehaviour
             _IsJumping = isJumpingThisFrame;
             _animator.SetBool(_IsJumpingHash, isJumpingThisFrame);
         }
+  //     bool isWallRunningThisFrame = m_PlayerController.Climbing;
+  //      if(_IsWallRunning != isWallRunningThisFrame)
+  //      {
+		//	_IsWallRunning = isWallRunningThisFrame;
+  //          _animator.SetBool(_IsWallRunningHash, isWallRunningThisFrame);
+
+		//}
     }
 
     private void AnimatioStringsSetup()

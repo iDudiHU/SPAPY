@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TigrisDigitalCreative._Input;
 using UnityEngine;
 using UnityEngine.Serialization;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 //[RequireComponent(typeof(Rigidbody))] 
 [DefaultExecutionOrder(-1)]
@@ -32,6 +33,7 @@ public class PlayerPhysicsMovement : MonoBehaviour
     [Header("=== Ground Settings ===")]
     //Grounded Stuff
     Vector3 m_UpAxis, m_RightAxis, m_ForwardAxis;
+    bool m_UnwalkableSurfaceHit = false;
 
     public bool m_AlignToSurface = true;
     [SerializeField] float m_AlignmentSpeed = 0.5f;
@@ -115,21 +117,34 @@ public class PlayerPhysicsMovement : MonoBehaviour
         t = Helpers.EaseOutCirc(t);
         transform.rotation = Quaternion.Slerp(transform.rotation, m_gravityAlignment * transform.rotation, t);
     }
+	private void ContactAlignment() {
+		m_gravityAlignment = Quaternion.FromToRotation(transform.up, m_ContactNormal);
+		float t = Time.deltaTime * m_AlignmentSpeed;
+		t = Helpers.EaseOutCirc(t);
+		transform.rotation = Quaternion.Slerp(transform.rotation, m_gravityAlignment * transform.rotation, t);
+        m_UpAxis = m_ContactNormal;
+	}
 
-
-    private void FixedUpdate()
+	private void FixedUpdate()
     {
         Vector3 gravity = CustomGravity.GetGravity(m_RigidBody.position, out m_UpAxis) * m_GravityScale;
         m_Velocity = m_RigidBody.velocity;
+        if (m_Input.MagneticBootsIsOn) {
+            ContactAlignment();
+		} else {
+            GravityAlignment();
+			m_Velocity += gravity * Time.unscaledDeltaTime;
+		}
         UpdateState();
         AdjustVelocity();
-        Jump(gravity);
-        if (m_Input.MagneticBootsIsOn) {
-            GravityAlignment();
-            m_Velocity += gravity * Time.unscaledDeltaTime;
-        }
-
-        m_RigidBody.velocity = m_Velocity;
+        Jump();
+		GravityAlignment();
+		m_Velocity += gravity * Time.unscaledDeltaTime;
+		//if (m_Input.MagneticBootsIsOn) {
+		//    GravityAlignment();
+		//    m_Velocity += gravity * Time.unscaledDeltaTime;
+		//}
+		m_RigidBody.velocity = m_Velocity;
         ClearState();
     }
 
@@ -160,8 +175,8 @@ public class PlayerPhysicsMovement : MonoBehaviour
         m_Velocity = m_RigidBody.velocity;
         if (IsGrounded || SnapToGround() || CheckSteepContacts()) {
             m_stepsSinceLastGrounded = 0;
-            m_GravityScale = 1f;
-            if (m_StepsSinceLastJump > 1) {
+			m_GravityScale = 1f;
+            if (m_StepsSinceLastJump > 1 && !m_UnwalkableSurfaceHit) {
                 m_CurrentJumpAmmount = 0;
             }
 
@@ -197,22 +212,70 @@ public class PlayerPhysicsMovement : MonoBehaviour
         m_ContactNormal = m_SteepNormal = m_ConnectionVelocity = Vector3.zero;
         m_PreviousConnectedRigidbody = m_ConnectedRigidbody;
         m_ConnectedRigidbody = null;
-    }
+        m_UnwalkableSurfaceHit = false;
+	}
+	void Jump() {
+		Vector3 jumpDirection;
+		float jumpSpeed = 0;
+		//Jump Feel Setup
+		SetJumpTimeCounter();
+		SetCoyoteTimeCounter();
+		SetJumpBufferTimeCounter();
 
-    void Jump(Vector3 gravity)
-    {
-        SetCounters();
+		if (IsGrounded) {
+			jumpDirection = m_ContactNormal;
+		} else if (OnSteep && !m_UnwalkableSurfaceHit) {
+			jumpDirection = m_SteepNormal;
+			m_CurrentJumpAmmount = 0;
+		} else if (m_MaxAirJumpAmmount > 0 && m_CurrentJumpAmmount <= m_MaxAirJumpAmmount) {
+			//Prevent jumping an extra time if you fall of a surface
+			if (m_CurrentJumpAmmount == 0) {
+				m_CurrentJumpAmmount = 1;
+			}
+			jumpDirection = m_ContactNormal;
+		} else {
+			return;
+		}
 
-        Vector3 jumpDirection = GetJumpDirection();
-        if (jumpDirection == Vector3.zero) return; // No jump direction found
+		if (m_JumpBufferTimeCounter > 0.0f && !m_IsJumping && m_CoyoteTimeCounter > 0.0f) {
+			m_StepsSinceLastJump = 0;
+			m_CurrentJumpAmmount++;
+			jumpSpeed = Mathf.Sqrt(2f * Physics.gravity.magnitude * m_JumpHeight);
+			jumpDirection = (jumpDirection + m_UpAxis).normalized;
+			float alignedSpeed = Vector3.Dot(m_Velocity, jumpDirection);
+			if (alignedSpeed > 0f) {
+				jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
+			}
+			m_IsJumping = true;
+			m_JumpBufferTimeCounter = 0.0f;
+			m_CoyoteTimeCounter = 0.0f;
+		} else if (m_Input.JumpIsPressed && m_IsJumping && m_JumpTimeCounter > 0.0f) {
+			jumpSpeed = Mathf.Sqrt(2f * Physics.gravity.magnitude * m_JumpHeight);
+			float alignedSpeed = Vector3.Dot(m_Velocity, jumpDirection);
+			if (alignedSpeed > 0f) {
+				jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
+			}
+			jumpSpeed *= m_ContinualJumpForceMultiplier;
+		} else if ((!m_Input.JumpIsPressed && m_IsJumping && IsGrounded) || m_JumpTimeCounter < 0) {
+			m_IsJumping = false;
+		}
+		m_Velocity += jumpDirection * jumpSpeed;
+	}
 
-        float jumpSpeed = CalculateJumpSpeed(jumpDirection, gravity);
-        if (jumpSpeed > 0) {
-            m_Velocity += jumpDirection * jumpSpeed;
-        }
-    }
+	//void Jump(Vector3 gravity)
+	//{
+	//    SetCounters();
 
-    void SetCounters()
+	//    Vector3 jumpDirection = GetJumpDirection();
+	//    if (jumpDirection == Vector3.zero) return; // No jump direction found
+
+	//    float jumpSpeed = CalculateJumpSpeed(jumpDirection, gravity);
+	//    if (jumpSpeed > 0) {
+	//        m_Velocity += jumpDirection * jumpSpeed;
+	//    }
+	//}
+
+	void SetCounters()
     {
         SetJumpTimeCounter();
         SetCoyoteTimeCounter();
@@ -401,6 +464,9 @@ public class PlayerPhysicsMovement : MonoBehaviour
                 m_ConnectedRigidbody = collision.rigidbody;
             }
             else if (upDot > -0.01f) {
+                if((collision.gameObject.layer & (1 << m_GroundLayerMask)) != 0) {
+                    m_UnwalkableSurfaceHit = true;
+                }
                 m_SteepContactCount++;
                 m_SteepNormal += normal;
                 if (m_GroundContactCount == 0) {

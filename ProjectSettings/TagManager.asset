@@ -16,7 +16,7 @@ TagManager:
   - Walkable
   - Stairs
   - IgnoreCharacterCollision
-  - 
+  - UnClimbableSurface
   - 
   - 
   - 
