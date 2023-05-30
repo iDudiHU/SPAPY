@@ -64,7 +64,7 @@ public class PlayerCameraController : MonoBehaviour
         {
             _playerLookInput = GetLookInput();
             PlayerLook();
-            //PitchCamera();
+            PitchCamera();
         }
     }
 
@@ -143,19 +143,25 @@ public class PlayerCameraController : MonoBehaviour
             _rigidbody.transform.rotation = Quaternion.RotateTowards(_rigidbody.transform.rotation, targetRotation, _rotationSpeedMultiplier * Time.deltaTime);
         }
     }
-
-
-
-
-
-
     private void PitchCamera()
     {
-        _cameraPitch += _playerLookInput.y * _pitchSpeedMultiplier;
-        _cameraPitch = Mathf.Clamp(_cameraPitch, -89.9f, 89.9f);
+        _cameraPitch = -_playerLookInput.y * _pitchSpeedMultiplier;
+        _cameraPitch = Mathf.Clamp(_cameraPitch, -60f, 80f);
 
-        CameraFollow.rotation = Quaternion.Euler(_cameraPitch, CameraFollow.rotation.eulerAngles.y, CameraFollow.rotation.eulerAngles.z);
+        Vector3 rightAxis = Vector3.Cross(CameraFollow.forward, CustomGravity.GetUpAxis(CameraFollow.position)).normalized;
+
+        // Instead of rotating the forward vector, rotate the up vector to get the new up direction
+        Vector3 upDir = Quaternion.AngleAxis(_cameraPitch, rightAxis) * CameraFollow.up;
+
+        // The target rotation should align the camera's up direction with the new up direction
+        Quaternion targetRotation = Quaternion.FromToRotation(CameraFollow.up, upDir) * CameraFollow.rotation;
+
+        CameraFollow.rotation = Quaternion.RotateTowards(CameraFollow.rotation, targetRotation, _pitchSpeedMultiplier * Time.deltaTime);
     }
+
+
+
+
     Vector3 ProjectDirectionOnPlane(Vector3 direction, Vector3 normal) {
         return (direction - normal * Vector3.Dot(direction, normal)).normalized;
     }

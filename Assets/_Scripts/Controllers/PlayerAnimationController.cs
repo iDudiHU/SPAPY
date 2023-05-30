@@ -43,12 +43,12 @@ public class PlayerAnimationController : MonoBehaviour
     {
         SetLocomotionBlendTreeAnimation();
         bool isFallingThisFrame = Falling();
+        _IsGrounded = m_PlayerController.IsGrounded;
+        _animator.SetBool(_IsGroundedHash, _IsGrounded);
         if (_IsFalling != isFallingThisFrame)
         {
             _IsFalling = isFallingThisFrame;
-            _IsGrounded = !isFallingThisFrame;
             _animator.SetBool(_IsFallingHash, isFallingThisFrame);
-            _animator.SetBool(_IsGroundedHash, _IsGrounded);
         }
         bool isJumpingThisFrame = m_PlayerController.m_IsJumping;
         if (_IsJumping != isJumpingThisFrame)

@@ -39,8 +39,8 @@ ModelImporter:
       name: InAirN
       takeName: InAir
       internalID: 0
-      firstFrame: 0
-      lastFrame: 80
+      firstFrame: 4.1
+      lastFrame: 41.2
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -68,8 +68,8 @@ ModelImporter:
       name: InAirL
       takeName: InAir
       internalID: -965930495727917705
-      firstFrame: 0
-      lastFrame: 80
+      firstFrame: 4.1
+      lastFrame: 41.2
       wrapMode: 0
       orientationOffsetY: 90
       level: 0
@@ -97,8 +97,8 @@ ModelImporter:
       name: InAirR
       takeName: InAir
       internalID: 2975022614868676167
-      firstFrame: 0
-      lastFrame: 80
+      firstFrame: 4.1
+      lastFrame: 41.2
       wrapMode: 0
       orientationOffsetY: -90
       level: 0
