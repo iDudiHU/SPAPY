@@ -101,7 +101,7 @@ public class PlayerAnimationController : MonoBehaviour
 
     private void SetLocomotionBlendTreeAnimation()
     {
-        Vector3 localVel = m_Rigidbody.transform.InverseTransformDirection(m_Rigidbody.velocity);
+        Vector3 localVel = m_Rigidbody.transform.InverseTransformDirection(m_PlayerController.RelativeVelocity);
         _animator.SetFloat(_xVelHash, localVel.x);
         _animator.SetFloat(_zVelHash, localVel.z);
     }

@@ -16,7 +16,7 @@ public class PlayerPhysicsMovement : MonoBehaviour
 
     [SerializeField] PlayerAnimationController m_AnimController;
     CapsuleCollider m_Collider;
-    Rigidbody m_RigidBody;
+    Rigidbody m_RigidBody, m_ConnectedRigidbody, m_PreviousConnectedRigidbody;
 
     [Header("=== Movement Settings ===")] [SerializeField]
     Transform m_PlayerInputSpace = default;
@@ -24,7 +24,10 @@ public class PlayerPhysicsMovement : MonoBehaviour
     [SerializeField, Range(0f, 100f)] float m_MaxAcceleration = 10f, m_MaxInAirAcceleration = 1f;
     [SerializeField, Range(0f, 100f)] float m_WalkMaxSpeed = 9f;
     [SerializeField, Range(0f, 100f)] float m_RunMaxSpeed = 15f;
-    Vector3 m_Velocity, m_DesiredVelocity;
+    Vector3 m_Velocity, m_RelativeVelocity, m_DesiredVelocity, m_ConnectionVelocity;
+    public Vector3 RelativeVelocity => m_RelativeVelocity;
+    //Needed for animated objects
+    Vector3 m_ConnectionWorldPosition, m_ConnectionLocalPosition;
 
     [Header("=== Ground Settings ===")]
     //Grounded Stuff
@@ -170,13 +173,30 @@ public class PlayerPhysicsMovement : MonoBehaviour
             m_ContactNormal = m_UpAxis;
             m_GravityScale = Mathf.Clamp(m_GravityScale + 0.3f, 0,2f);
         }
+
+        if (m_ConnectedRigidbody) {
+            if (m_ConnectedRigidbody.isKinematic || m_ConnectedRigidbody.mass >= m_RigidBody.mass) {
+                UpdateConnectionState();
+            }
+        }
+    }
+    void UpdateConnectionState ()
+    {
+        if (m_ConnectedRigidbody == m_PreviousConnectedRigidbody) {
+            Vector3 displacementFromPreviousFrame = m_ConnectedRigidbody.transform.TransformPoint(m_ConnectionLocalPosition) - m_ConnectionWorldPosition;
+            m_ConnectionVelocity = displacementFromPreviousFrame / Time.unscaledDeltaTime;
+        }
+        m_ConnectionWorldPosition = m_RigidBody.position;
+        m_ConnectionLocalPosition = m_ConnectedRigidbody.transform.InverseTransformPoint(m_ConnectionWorldPosition);
     }
 
     void ClearState()
     {
         m_GroundContactCount = 0;
         m_SteepContactCount = 0;
-        m_ContactNormal = m_SteepNormal = Vector3.zero;
+        m_ContactNormal = m_SteepNormal = m_ConnectionVelocity = Vector3.zero;
+        m_PreviousConnectedRigidbody = m_ConnectedRigidbody;
+        m_ConnectedRigidbody = null;
     }
 
     void Jump(Vector3 gravity)
@@ -340,6 +360,7 @@ public class PlayerPhysicsMovement : MonoBehaviour
             m_Velocity = (m_Velocity - hit.normal * dot).normalized * speed;
         }
 
+        m_ConnectedRigidbody = hit.rigidbody;
         return true;
     }
 
@@ -350,11 +371,12 @@ public class PlayerPhysicsMovement : MonoBehaviour
 
     void AdjustVelocity()
     {
+		m_RelativeVelocity = m_Velocity - m_ConnectionVelocity;
         Vector3 xAxis = ProjectDirectionOnPlane(m_RightAxis, m_ContactNormal);
         Vector3 zAxis = ProjectDirectionOnPlane(m_ForwardAxis, m_ContactNormal);
 
-        float currentX = Vector3.Dot(m_Velocity, xAxis);
-        float currentZ = Vector3.Dot(m_Velocity, zAxis);
+        float currentX = Vector3.Dot(m_RelativeVelocity, xAxis);
+        float currentZ = Vector3.Dot(m_RelativeVelocity, zAxis);
 
         float acceleration = IsGrounded ? m_MaxAcceleration : m_MaxInAirAcceleration;
         float maxSpeedChange = acceleration * Time.deltaTime;
@@ -363,8 +385,9 @@ public class PlayerPhysicsMovement : MonoBehaviour
             Mathf.MoveTowards(currentX, m_DesiredVelocity.x, maxSpeedChange);
         float newZ =
             Mathf.MoveTowards(currentZ, m_DesiredVelocity.z, maxSpeedChange);
-        m_Velocity += xAxis * (newX - currentX) + zAxis * (newZ - currentZ);
-    }
+		m_Velocity += xAxis * (newX - currentX) + zAxis * (newZ - currentZ);
+		//m_AnimController.SetVelocity(m_Velocity);
+	}
 
     void EvaluateCollision(Collision collision)
     {
@@ -375,10 +398,14 @@ public class PlayerPhysicsMovement : MonoBehaviour
             if (upDot >= minDot) {
                 m_GroundContactCount++;
                 m_ContactNormal += normal;
+                m_ConnectedRigidbody = collision.rigidbody;
             }
             else if (upDot > -0.01f) {
                 m_SteepContactCount++;
                 m_SteepNormal += normal;
+                if (m_GroundContactCount == 0) {
+                    m_ConnectedRigidbody = collision.rigidbody;
+                }
             }
         }
     }
