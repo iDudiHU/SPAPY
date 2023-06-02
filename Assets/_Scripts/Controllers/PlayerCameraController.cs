@@ -131,19 +131,33 @@ public class PlayerCameraController : MonoBehaviour
         _playerLookInput = new Vector3(_input.LookInput.x, (_input.InvertMouseY ? -_input.LookInput.y : _input.LookInput.y), 0.0f);
         return Vector3.Lerp(_previousPlayerLookInput, _playerLookInput * Time.deltaTime, _playerLookInputLerpTime);
     }
-    private void PlayerLook()
-    {
-        float rotationDelta = _playerLookInput.x * _rotationSpeedMultiplier;
-        Quaternion rotation = Quaternion.AngleAxis(rotationDelta, CustomGravity.GetUpAxis(_rigidbody.position));
-        Vector3 dir = Vector3.ProjectOnPlane(rotation * _rigidbody.transform.forward, CustomGravity.GetUpAxis(_rigidbody.position));
+   // private void PlayerLook()
+   // {
+   //     float rotationDelta = _playerLookInput.x * _rotationSpeedMultiplier;
+   //     Quaternion rotation = Quaternion.AngleAxis(rotationDelta, CustomGravity.GetUpAxis(_rigidbody.position));
+   //     Vector3 dir = Vector3.ProjectOnPlane(rotation * _rigidbody.transform.forward, CustomGravity.GetUpAxis(_rigidbody.position));
 
-        // Ensure the direction vector is not zero
-        if (dir != Vector3.zero) {
-            Quaternion targetRotation = Quaternion.LookRotation(dir, CustomGravity.GetUpAxis(_rigidbody.position));
-            _rigidbody.transform.rotation = Quaternion.RotateTowards(_rigidbody.transform.rotation, targetRotation, _rotationSpeedMultiplier * Time.deltaTime);
-        }
-    }
-    private void PitchCamera()
+   //     // Ensure the direction vector is not zero
+   //     if (dir != Vector3.zero) {
+   //         Quaternion targetRotation = Quaternion.LookRotation(dir, CustomGravity.GetUpAxis(_rigidbody.position));
+   //         //This rotates the player/ I can't rotate the player towards a rotation I have to add the offset to the current rotation in local space
+			//_rigidbody.transform.rotation = Quaternion.RotateTowards(_rigidbody.transform.rotation, targetRotation, _rotationSpeedMultiplier * Time.deltaTime);
+   //     }
+   // }
+	private void PlayerLook()
+	{
+		// Calculate the desired rotation on the Y-axis
+		float rotationDelta = _playerLookInput.x * _rotationSpeedMultiplier;
+
+		// Create a Quaternion representing the desired rotation
+		Quaternion desiredRotation = Quaternion.Euler(0, rotationDelta, 0);
+
+		// Apply the desired rotation to the player's current rotation
+		// Only affects the Y-axis
+		_rigidbody.transform.localRotation *= desiredRotation;
+	}
+
+	private void PitchCamera()
     {
         _cameraPitch = -_playerLookInput.y * _pitchSpeedMultiplier;
         _cameraPitch = Mathf.Clamp(_cameraPitch, -60f, 80f);

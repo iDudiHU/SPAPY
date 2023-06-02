@@ -129,17 +129,19 @@ public class PlayerPhysicsMovement : MonoBehaviour
     {
         Vector3 gravity = CustomGravity.GetGravity(m_RigidBody.position, out m_UpAxis) * m_GravityScale;
         m_Velocity = m_RigidBody.velocity;
-        if (m_Input.MagneticBootsIsOn) {
-            ContactAlignment();
-		} else {
-            GravityAlignment();
-			m_Velocity += gravity * Time.unscaledDeltaTime;
-		}
+  //      if (m_Input.MagneticBootsIsOn) {
+  //          ContactAlignment();
+		//} else {
+  //          GravityAlignment();
+		//	m_Velocity += gravity * Time.unscaledDeltaTime;
+		//}
         UpdateState();
         AdjustVelocity();
         Jump();
-		GravityAlignment();
-		m_Velocity += gravity * Time.unscaledDeltaTime;
+        if (m_Input.MagneticBootsIsOn) {
+			GravityAlignment();
+			m_Velocity += gravity * Time.unscaledDeltaTime;
+		}
 		//if (m_Input.MagneticBootsIsOn) {
 		//    GravityAlignment();
 		//    m_Velocity += gravity * Time.unscaledDeltaTime;
@@ -174,7 +176,7 @@ public class PlayerPhysicsMovement : MonoBehaviour
         m_StepsSinceLastJump += 1;
         m_Velocity = m_RigidBody.velocity;
         if (IsGrounded || SnapToGround() || CheckSteepContacts()) {
-            m_stepsSinceLastGrounded = 0;
+				m_stepsSinceLastGrounded = 0;
 			m_GravityScale = 1f;
             if (m_StepsSinceLastJump > 1 && !m_UnwalkableSurfaceHit) {
                 m_CurrentJumpAmmount = 0;
@@ -422,7 +424,6 @@ public class PlayerPhysicsMovement : MonoBehaviour
         if (dot > 0f) {
             m_Velocity = (m_Velocity - hit.normal * dot).normalized * speed;
         }
-
         m_ConnectedRigidbody = hit.rigidbody;
         return true;
     }

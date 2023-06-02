@@ -18,6 +18,9 @@ public class GravityPlane : GravitySource {
         if (distance > 0f) {
             g *= 1f - distance / range;
         }
+        if (distance < 0f) {
+            return Vector3.zero;
+        }
         return g * up;
     }
 
