@@ -36,7 +36,11 @@ public class PlayerPhysicsMovement : MonoBehaviour
     bool m_UnwalkableSurfaceHit = false;
 
     public bool m_AlignToSurface = true;
-    [SerializeField] float m_AlignmentSpeed = 0.5f;
+    //What radious the spherecast have below
+    [SerializeField] float sphereCastRadius = 1f;
+    [SerializeField] float sphereCastMaxDistance = 8;
+
+	[SerializeField] float m_AlignmentSpeed = 0.5f;
     Quaternion m_gravityAlignment = Quaternion.identity;
     public bool IsGrounded => m_GroundContactCount > 0;
     private bool OnSteep => m_SteepContactCount > 0;
@@ -117,36 +121,59 @@ public class PlayerPhysicsMovement : MonoBehaviour
         t = Helpers.EaseOutCirc(t);
         transform.rotation = Quaternion.Slerp(transform.rotation, m_gravityAlignment * transform.rotation, t);
     }
-	private void ContactAlignment() {
-		m_gravityAlignment = Quaternion.FromToRotation(transform.up, m_ContactNormal);
+	private void ContactAlignment(Vector3 contactNormal) {
+		m_gravityAlignment = Quaternion.FromToRotation(transform.up, contactNormal);
 		float t = Time.deltaTime * m_AlignmentSpeed;
 		t = Helpers.EaseOutCirc(t);
 		transform.rotation = Quaternion.Slerp(transform.rotation, m_gravityAlignment * transform.rotation, t);
-        m_UpAxis = m_ContactNormal;
+        m_UpAxis = contactNormal;
 	}
 
 	private void FixedUpdate()
     {
         Vector3 gravity = CustomGravity.GetGravity(m_RigidBody.position, out m_UpAxis) * m_GravityScale;
-        m_Velocity = m_RigidBody.velocity;
-  //      if (m_Input.MagneticBootsIsOn) {
-  //          ContactAlignment();
-		//} else {
-  //          GravityAlignment();
-		//	m_Velocity += gravity * Time.unscaledDeltaTime;
-		//}
+        //m_UpAxis = transform.up;
+		m_Velocity = m_RigidBody.velocity;
+        //      if (m_Input.MagneticBootsIsOn) {
+        //          ContactAlignment();
+        //} else {
+        //          GravityAlignment();
+        //	m_Velocity += gravity * Time.unscaledDeltaTime;
+        //}
+        if (m_Input.MagneticBootsIsOn) {
+            // Create a Ray pointing down from the player.
+            Ray ray = new Ray(transform.position, -transform.up);
+
+            // Perform the SphereCast.
+            if (Physics.SphereCast(ray, sphereCastRadius, out RaycastHit hit, sphereCastMaxDistance)) {
+				m_UpAxis = hit.normal;
+			}
+        }
         UpdateState();
         AdjustVelocity();
         Jump();
         if (m_Input.MagneticBootsIsOn) {
-			GravityAlignment();
+            // Create a Ray pointing down from the player.
+            Ray ray = new Ray(transform.position, -transform.up);
+
+            // Perform the SphereCast.
+            if (Physics.SphereCast(ray, sphereCastRadius, out RaycastHit hit, sphereCastMaxDistance)) {
+                // The new gravity direction is the normal of the hit surface.
+                gravity = -hit.normal * 9.81f;
+
+                // Apply contact alignment.
+                ContactAlignment(hit.normal);
+
+                // Apply the gravity to the player's velocity.
+                m_Velocity += gravity * Time.deltaTime;
+
+            }
+        } else {
+            // Apply default gravity.
+            GravityAlignment();
 			m_Velocity += gravity * Time.unscaledDeltaTime;
-		}
-		//if (m_Input.MagneticBootsIsOn) {
-		//    GravityAlignment();
-		//    m_Velocity += gravity * Time.unscaledDeltaTime;
-		//}
-		m_RigidBody.velocity = m_Velocity;
+        }
+        m_RigidBody.velocity = m_Velocity;
         ClearState();
     }
 

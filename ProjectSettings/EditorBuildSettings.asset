@@ -6,8 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/FPS_TPS_Gameplay.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/Intro.unity
+    guid: efb668a498a7b17469be9d97b4ee426e
+  - enabled: 1
+    path: Assets/Scenes/Physics Controller.unity
+    guid: cdc1cdbfbf359da4c91a22d74f016df8
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: ca32edfaf1ec47d43a4e12806929b6e3,
       type: 2}
