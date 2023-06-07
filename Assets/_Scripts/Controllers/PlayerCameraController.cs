@@ -150,7 +150,7 @@ public class PlayerCameraController : MonoBehaviour
 		float rotationDelta = _playerLookInput.x * _rotationSpeedMultiplier;
 
 		// Create a Quaternion representing the desired rotation
-		Quaternion desiredRotation = Quaternion.Euler(0, rotationDelta, 0);
+		Quaternion desiredRotation = Quaternion.Euler(0f, rotationDelta, 0f);
 
 		// Apply the desired rotation to the player's current rotation
 		// Only affects the Y-axis
@@ -159,18 +159,12 @@ public class PlayerCameraController : MonoBehaviour
 
 	private void PitchCamera()
     {
-        _cameraPitch = -_playerLookInput.y * _pitchSpeedMultiplier;
-        _cameraPitch = Mathf.Clamp(_cameraPitch, -60f, 80f);
+        _cameraPitch += _playerLookInput.y * _pitchSpeedMultiplier;
+        _cameraPitch = Mathf.Clamp(_cameraPitch, -60f, 70f);
 
-        Vector3 rightAxis = Vector3.Cross(CameraFollow.forward, CustomGravity.GetUpAxis(CameraFollow.position)).normalized;
+        Quaternion desiredRotation = Quaternion.Euler(_cameraPitch, 0f, 0f);
 
-        // Instead of rotating the forward vector, rotate the up vector to get the new up direction
-        Vector3 upDir = Quaternion.AngleAxis(_cameraPitch, rightAxis) * CameraFollow.up;
-
-        // The target rotation should align the camera's up direction with the new up direction
-        Quaternion targetRotation = Quaternion.FromToRotation(CameraFollow.up, upDir) * CameraFollow.rotation;
-
-        CameraFollow.rotation = Quaternion.RotateTowards(CameraFollow.rotation, targetRotation, _pitchSpeedMultiplier * Time.deltaTime);
+        CameraFollow.localRotation = desiredRotation;
     }
 
 

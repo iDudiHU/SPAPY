@@ -131,6 +131,7 @@ public class PlayerPhysicsMovement : MonoBehaviour
 
 	private void FixedUpdate()
     {
+        //This makes grounded bugged !!!!!!!!!!!!
         Vector3 gravity = CustomGravity.GetGravity(m_RigidBody.position, out m_UpAxis) * m_GravityScale;
         //m_UpAxis = transform.up;
 		m_Velocity = m_RigidBody.velocity;
@@ -291,20 +292,7 @@ public class PlayerPhysicsMovement : MonoBehaviour
 		m_Velocity += jumpDirection * jumpSpeed;
 	}
 
-	//void Jump(Vector3 gravity)
-	//{
-	//    SetCounters();
-
-	//    Vector3 jumpDirection = GetJumpDirection();
-	//    if (jumpDirection == Vector3.zero) return; // No jump direction found
-
-	//    float jumpSpeed = CalculateJumpSpeed(jumpDirection, gravity);
-	//    if (jumpSpeed > 0) {
-	//        m_Velocity += jumpDirection * jumpSpeed;
-	//    }
-	//}
-
-	void SetCounters()
+    void SetCounters()
     {
         SetJumpTimeCounter();
         SetCoyoteTimeCounter();
